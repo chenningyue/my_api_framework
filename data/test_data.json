@@ -1,0 +1,7 @@
+{
+  "pet_status_cases": ["available","pending","sold"],
+  "bearer_cases": [
+    {"name": "无token","token": null,"expect": 401},
+    {"name": "有token","token": "mytoken123","expect": 200}
+  ]
+}

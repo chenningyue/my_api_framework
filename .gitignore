@@ -1,0 +1,23 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- pytest ---
+.pytest_cache/
+
+# --- 测试产物（本地生成，不提交）---
+allure-results*/
+allure-report/
+report.html
+log.txt
+*.log
+
+# --- IDE / 编辑器 ---
+.idea/
+.vscode/
+
+# --- 虚拟环境 ---
+.venv/
+venv/
+env/
