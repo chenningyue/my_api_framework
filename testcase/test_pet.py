@@ -4,6 +4,7 @@ from common.read_data import load_json
 
 DATA = load_json("data/test_data.json")
 @pytest.mark.smoke
+
 @pytest.mark.parametrize("status",DATA["pet_status_cases"])
 def test_find_by_status(status):
     api = PetApi()

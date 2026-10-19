@@ -1,4 +1,4 @@
-# my_api_framework — 接口自动化测试框架（练手版）
+# cny_my_api_framework — 接口自动化测试框架（练手版）
 
 基于 **Python + pytest + requests** 的分层接口自动化框架。练手对象是两个公开接口：
 
