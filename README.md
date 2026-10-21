@@ -1,11 +1,11 @@
-# cny_my_api_framework — 接口自动化测试框架（练手版）
+# cny_my_api_framework — 接口自动化测试框架
 
-基于 **Python + pytest + requests** 的分层接口自动化框架。练手对象是两个公开接口：
+基于 **Python + pytest + requests** 的分层接口自动化框架。对象是两个公开接口：
 
-- Swagger **Petstore**（`https://petstore.swagger.io/v2`）—— GET/POST/PUT/DELETE 都有，练增删改查
-- **httpbin**（`https://httpbin.org`）—— 练带 token 鉴权（`/bearer` 无 token 返回 401，有 token 返回 200）
+- Swagger **Petstore**（`https://petstore.swagger.io/v2`）—— GET/POST/PUT/DELETE 都有
+- **httpbin**（`https://httpbin.org`）—— 带 token 鉴权（`/bearer` 无 token 返回 401，有 token 返回 200）
 
-> 这个仓库是「从 0 搭一套接口自动化框架」的学习产出物，目标是：**别人 clone 下来，装依赖，就能跑**。
+> 这个仓库是「从 0 搭一套接口自动化框架」的产出物，目标是：**别人 clone 下来，装依赖，就能跑**。
 
 ## 目录结构
 
