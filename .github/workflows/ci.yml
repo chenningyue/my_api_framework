@@ -24,8 +24,8 @@
         - name: 装依赖
           run: pip install -r requirements.txt
 
-        - name: 跑测试 + 出报告
-          run: pytest --html=report.html --self-contained-html
+        - name: 跑测试 + 出报告（跳过 db 用例，CI 上没有 本地MySQL）
+          run: pytest -m "not db" --html=report.html --self-contained-html
 
         - name: 保存报告（测试红了也保留）
           if: always()
