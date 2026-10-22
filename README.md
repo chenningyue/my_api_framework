@@ -2,7 +2,7 @@
 
 基于 **Python + pytest + requests + pymysql** 的分层自动化测试框架，包含两块：
 
-- **接口自动化**：对象是两个公开接口——Swagger **Petstore**（增删改查）、**httpbin**（带 token 鉴权）
+- **接口自动化**：Swagger **Petstore** 三大模块全覆盖（**pet** 增删改查 / **store** 订单 / **user** 用户）+ **httpbin** 带 token 鉴权，共 **23 条用例**（正反用例齐全、每条独立）
 - **数据库校验**：测试工程师的日常「**调接口 → 查库 → 断言一致**」
 
 > 这个仓库是「从 0 搭一套自动化框架」的产出物，目标是：**别人 clone 下来，装依赖，就能跑；push 到 GitHub 后 CI 自动跑**。
@@ -23,11 +23,15 @@ my_api_framework/
 ├── data/              # 数据层：测试数据（数据驱动）
 │   └── test_data.json
 ├── api/               # 接口层：每个接口封装成一个类/方法
-│   ├── pet_api.py
-│   └── bearer_api.py
+│   ├── pet_api.py       # Petstore pet（增删改查 + 状态筛选）
+│   ├── store_api.py     # Petstore store（库存 / 订单增删查）
+│   ├── user_api.py      # Petstore user（用户增删改查 + 登录）
+│   └── bearer_api.py    # httpbin bearer（带 token 鉴权）
 ├── testcase/          # 用例层：只写用例和断言
-│   ├── test_pet.py
-│   ├── test_bearer.py
+│   ├── test_pet.py          # pet 增删改查 + 状态筛选（含正反用例）
+│   ├── test_store.py        # store 库存 / 订单增删查
+│   ├── test_user.py         # user 增删改查 + 登录（含正反用例）
+│   ├── test_bearer.py       # httpbin 带/不带 token
 │   └── test_db_api_consistency.py   # 调接口→查库校验（标了 @pytest.mark.db）
 ├── mock_app.py        # Flask mock 接口（本地假后端，背后查 school 库）
 ├── conftest.py        # 把框架根目录加进 sys.path
@@ -64,9 +68,10 @@ pytest -m "not db"     # 跳过数据库用例（CI 上这么跑，因为 CI 没
 # pytest-html（单文件，双击可开）
 pytest --html=report.html --self-contained-html
 
-# allure
-pytest --alluredir=allure-results
-allure serve allure-results
+# allure（两段式：先出原始结果，再生成报告）
+pytest --alluredir=allure-results --clean-alluredir
+allure generate allure-results -o allure-report --single-file --clean   # 单文件，双击可开
+allure serve allure-results                                             # 或本地起服务看
 ```
 
 ## 分层思路（一句话）
@@ -108,8 +113,10 @@ INSERT INTO students (name, class_name) VALUES
 ('张三','一班'), ('李四','一班'), ('王五','二班'), ('赵六','二班'), ('张三','二班');
 ```
 
-## CI（GitHub Actions）
+## CI（GitHub Actions + Jenkins）
 
-push 到 `main` 自动触发：**拉代码 → 装依赖 → 跑测试（`pytest -m "not db"`）→ 出报告**。
+**GitHub Actions**：push 到 `main` 自动触发——**拉代码 → 装依赖 → 跑测试（`pytest -m "not db"`）→ 出报告**。
+
+**Jenkins（本地/内网）**：建了一个任务，做同样四步，出 allure 单文件报告（`pytest --alluredir` → `allure generate --single-file` → 归档 `allure-report/index.html`），配了定时 `H 2 * * *` 每晚自动回归。
 
 > 为什么 CI 跳过 db 用例：CI 的 Linux 上没有你的 MySQL、也连不到你本机的 localhost 数据库，所以标了 `@pytest.mark.db` 的用例在 CI 上跳过、只在本地跑。
